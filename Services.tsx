@@ -1,0 +1,303 @@
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Home, Briefcase, Factory, Cctv, Network, Building2, Calculator, ChevronRight, Phone, Mail, Shield, Zap, Wifi, Lock, Eye, Thermometer, Lightbulb, DoorOpen, Car, Users, Flame, Wind, Gauge, Warehouse, Server, Settings, GraduationCap, Link, Package } from 'lucide-react';
+
+type Language = 'en' | 'ar';
+
+interface ServiceCategory {
+  id: number;
+  name: string;
+  nameAr: string;
+  description: string;
+  descriptionAr: string;
+  icon: React.ReactNode;
+  image: string;
+  features: { name: string; nameAr: string; icon: React.ReactNode }[];
+}
+
+const ServicesPage: React.FC<{ lang: Language }> = ({ lang }) => {
+  const isRtl = lang === 'ar';
+  const location = useLocation();
+  const scrollToCategoryId = location.state?.scrollToId;
+
+  // Scroll to top when component mounts OR scroll to specific category
+  useEffect(() => {
+    if (scrollToCategoryId) {
+      // Scroll to specific category
+      setTimeout(() => {
+        scrollToCategory(scrollToCategoryId);
+      }, 100);
+    } else {
+      // Scroll to top
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [scrollToCategoryId]);
+
+  // Function to scroll to specific category
+  const scrollToCategory = (categoryId: number) => {
+    const element = document.getElementById(`service-category-${categoryId}`);
+    if (element) {
+      const offset = 140;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const categories: ServiceCategory[] = [
+    {
+      id: 1,
+      name: 'Smart Home Solutions',
+      nameAr: 'حلول المنازل الذكية',
+      description: 'Integrated systems for security, energy efficiency, and automated comfort control in residential spaces.',
+      descriptionAr: 'أنظمة متكاملة للأمان وكفاءة الطاقة والتحكم التلقائي بالراحة في المساحات السكنية.',
+      icon: <Home size={32} />,
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop',
+      features: [
+        { name: 'Smart Cameras', nameAr: 'الكاميرات الذكية', icon: <Cctv size={18} /> },
+        { name: 'Smart Locks', nameAr: 'الأقفال الذكية', icon: <Lock size={18} /> },
+        { name: 'Smart Sensors', nameAr: 'الحساسات الذكية', icon: <Eye size={18} /> },
+        { name: 'Smart Lighting', nameAr: 'الإضاءة الذكية', icon: <Lightbulb size={18} /> },
+        { name: 'Automated Curtains & Shades', nameAr: 'الستائر والظلال الآلية', icon: <DoorOpen size={18} /> },
+        { name: 'AC Control', nameAr: 'التحكم بالتكييف', icon: <Thermometer size={18} /> },
+        { name: 'Full Automation Scenarios', nameAr: 'سيناريوهات متكاملة (Full Automation)', icon: <Settings size={18} /> },
+        { name: 'Compatibility', nameAr: 'التوافق', icon: <Link size={18} /> },
+      ]
+    },
+    {
+      id: 2,
+      name: 'Smart Office Solutions',
+      nameAr: 'حلول المكاتب الذكية',
+      description: 'Optimized workspace management, smart climate control, and advanced collaboration tools.',
+      descriptionAr: 'إدارة محسنة لمساحات العمل، تحكم ذكي بالمناخ، وأدوات تعاون متقدمة.',
+      icon: <Briefcase size={32} />,
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
+      features: [
+        { name: 'Access Control Systems', nameAr: 'أنظمة الدخول (Access Control)', icon: <Lock size={18} /> },
+        { name: 'Attendance Systems', nameAr: 'أنظمة الحضور (Attendance Systems)', icon: <Users size={18} /> },
+        { name: 'Office Cameras', nameAr: 'كاميرات المكاتب', icon: <Cctv size={18} /> },
+        { name: 'Smart Meeting Rooms', nameAr: 'غرف الاجتماعات الذكية', icon: <Briefcase size={18} /> },
+        { name: 'Smart Lighting', nameAr: 'الإضاءة الذكية', icon: <Lightbulb size={18} /> },
+        { name: 'AC Control', nameAr: 'التحكم بالتكييف', icon: <Thermometer size={18} /> },
+        { name: 'Parking Automation', nameAr: 'بوابات المواقف (Parking Automation)', icon: <Car size={18} /> },
+        { name: 'Door Automation', nameAr: 'أتمتة الأبواب', icon: <DoorOpen size={18} /> },
+        { name: 'Visitor Management', nameAr: 'إدارة الزوار (Visitor Management)', icon: <Users size={18} /> },
+      ]
+    },
+    {
+      id: 3,
+      name: 'Smart Factory Solutions',
+      nameAr: 'حلول المصانع الذكية',
+      description: 'Predictive maintenance, real-time monitoring, and process automation for efficient manufacturing.',
+      descriptionAr: 'صيانة تنبؤية، مراقبة فورية، وأتمتة العمليات للتصنيع الفعال.',
+      icon: <Factory size={32} />,
+      image: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?q=80&w=2071&auto=format&fit=crop',
+      features: [
+        { name: 'Industrial Cameras', nameAr: 'كاميرات صناعية', icon: <Cctv size={18} /> },
+        { name: 'Gas Detection', nameAr: 'كشف الغازات', icon: <Wind size={18} /> },
+        { name: 'Fire Alarm Systems', nameAr: 'أنظمة الإنذار من الحريق', icon: <Flame size={18} /> },
+        { name: 'Environmental Sensors', nameAr: 'حساسات بيئية', icon: <Thermometer size={18} /> },
+        { name: 'Energy Monitoring', nameAr: 'مراقبة الطاقة', icon: <Gauge size={18} /> },
+        { name: 'Production Safety', nameAr: 'سلامة الإنتاج', icon: <Shield size={18} /> },
+        { name: 'Warehouse Automation', nameAr: 'أتمتة المستودعات', icon: <Warehouse size={18} /> },
+        { name: 'Industrial Access Control', nameAr: 'التحكم بالدخول الصناعي', icon: <Lock size={18} /> },
+      ]
+    },
+    {
+      id: 4,
+      name: 'Security & Surveillance Systems',
+      nameAr: 'أنظمة الأمن والمراقبة',
+      description: 'Comprehensive and advanced security solutions to protect properties and assets with the latest technologies.',
+      descriptionAr: 'حلول أمنية شاملة ومتطورة لحماية الممتلكات والأصول بأحدث التقنيات.',
+      icon: <Cctv size={32} />,
+      image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?q=80&w=2070&auto=format&fit=crop',
+      features: [
+        { name: 'Camera Types', nameAr: 'أنواع الكاميرات', icon: <Cctv size={18} /> },
+        { name: 'Features', nameAr: 'المميزات', icon: <Settings size={18} /> },
+        { name: 'Gas Sensors', nameAr: 'حساسات الغاز', icon: <Wind size={18} /> },
+        { name: 'Smoke Sensors', nameAr: 'حساسات الدخان', icon: <Flame size={18} /> },
+        { name: 'Motion Detectors', nameAr: 'كاشفات الحركة', icon: <Eye size={18} /> },
+        { name: 'Alerts', nameAr: 'التنبيهات', icon: <Shield size={18} /> },
+      ]
+    },
+    {
+      id: 5,
+      name: 'Networks & Infrastructure',
+      nameAr: 'الشبكات والأنظمة',
+      description: 'Establishing a robust digital infrastructure ensuring stable and fast connectivity for all systems.',
+      descriptionAr: 'تأسيس بنية تحتية رقمية قوية تضمن اتصالاً مستقراً وسريعاً لجميع الأنظمة.',
+      icon: <Network size={32} />,
+      image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=2070&auto=format&fit=crop',
+      features: [
+        { name: 'Wi-Fi Mesh Network', nameAr: 'شبكة Wi-Fi Mesh', icon: <Wifi size={18} /> },
+        { name: 'Routers & Switches', nameAr: 'موجهات ومحولات (Routers & Switches)', icon: <Server size={18} /> },
+        { name: 'System Integration', nameAr: 'تكامل الأنظمة (System Integration)', icon: <Link size={18} /> },
+        { name: 'Infrastructure', nameAr: 'البنية التحتية', icon: <Building2 size={18} /> },
+        { name: 'Network Security', nameAr: 'أمن الشبكات', icon: <Shield size={18} /> },
+      ]
+    },
+    {
+      id: 6,
+      name: 'Building Management System',
+      nameAr: 'نظام إدارة المباني (BMS)',
+      description: 'We provide smart building management solutions that enable you to fully control HVAC, lighting, energy, and safety systems through a single centralized platform. Our solutions help reduce energy consumption, improve operational efficiency, and enhance security in residential and commercial buildings.',
+      descriptionAr: 'نقدّم حلول إدارة مباني ذكية تُمكّنك من التحكم الكامل في التكييف، الإضاءة، الطاقة، وأنظمة السلامة من خلال منصة مركزية واحدة. حلولنا تساعد على تقليل استهلاك الطاقة، تحسين كفاءة التشغيل، ورفع مستوى الأمان في المباني السكنية والتجارية.',
+      icon: <Building2 size={32} />,
+      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
+      features: [
+        { name: 'HVAC & Ventilation', nameAr: 'التكييف والتهوية', icon: <Thermometer size={18} /> },
+        { name: 'Smart Lighting', nameAr: 'الإضاءة الذكية', icon: <Lightbulb size={18} /> },
+        { name: 'Energy Management', nameAr: 'إدارة الطاقة', icon: <Zap size={18} /> },
+        { name: 'Security & Safety Systems', nameAr: 'أنظمة الأمن والسلامة', icon: <Shield size={18} /> },
+      ]
+    },
+    {
+      id: 7,
+      name: 'Business & Accounting Systems',
+      nameAr: 'تنفيذ وتكامل الأنظمة المحاسبية',
+      description: 'At NirvanaIOT, we provide comprehensive implementation services for accounting systems to help you manage your business more efficiently and connect financial operations with modern technology. An integrated solution from system to hardware... to run your business smoothly and professionally.',
+      descriptionAr: 'نقدّم في NirvanaIOT خدمات تنفيذ متكاملة للأنظمة المحاسبية لمساعدتك على إدارة أعمالك بكفاءة أعلى وربط العمليات المالية بالتقنية الحديثة. حل متكامل من النظام إلى الأجهزة… لتشغيل أعمالك بسلاسة واحترافية.',
+      icon: <Calculator size={32} />,
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2070&auto=format&fit=crop',
+      features: [
+        { name: 'Odoo ERP', nameAr: 'Odoo ERP', icon: <Server size={18} /> },
+        { name: 'Al-Amin Accounting Software', nameAr: 'برنامج الأمين المحاسبي', icon: <Calculator size={18} /> },
+        { name: 'Full System Setup', nameAr: 'إعداد النظام الكامل', icon: <Settings size={18} /> },
+        { name: 'System Customization', nameAr: 'تخصيص النظام', icon: <Settings size={18} /> },
+        { name: 'Employee Training', nameAr: 'تدريب الموظفين', icon: <GraduationCap size={18} /> },
+        { name: 'System Integration', nameAr: 'ربط الأنظمة', icon: <Link size={18} /> },
+        { name: 'Hardware Supply', nameAr: 'توريد الأجهزة', icon: <Package size={18} /> },
+      ]
+    },
+  ];
+
+  return (
+    <div className={`min-h-screen bg-slate-50`}>
+      {/* Hero Section */}
+      <div className="relative pt-24 pb-16 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)',
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-16 relative z-10 text-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 animate-fadeIn">
+            {isRtl ? 'خدماتنا المتكاملة' : 'Our Complete Services'}
+          </h1>
+          <p className="text-blue-100 text-xl max-w-2xl mx-auto animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+            {isRtl ? 'حلول تقنية متطورة لتحويل أعمالك إلى بيئة ذكية ومتصلة' : 'Advanced technology solutions to transform your business into a smart, connected environment'}
+          </p>
+        </div>
+      </div>
+
+      <div className="py-12">
+        {/* Categories with Full Width Display */}
+        {categories.map((category, index) => (
+          <section
+            key={category.id}
+            id={`service-category-${category.id}`}
+            className={`py-16 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}
+          >
+            <div className="max-w-7xl mx-auto px-4">
+              {/* Category Card */}
+              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 animate-fadeIn">
+                {/* Header with Image */}
+                <div className="relative h-64 md:h-80 overflow-hidden">
+                  <img
+                    src={category.image}
+                    alt={isRtl ? category.nameAr : category.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20"></div>
+
+                  {/* Title Overlay */}
+                  <div className="absolute inset-0 flex items-end">
+                    <div className="p-8 w-full">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-2xl shadow-lg">
+                          {category.icon}
+                        </div>
+                        <div>
+                          <h2 className="text-3xl md:text-4xl font-extrabold text-white">
+                            {isRtl ? category.nameAr : category.name}
+                          </h2>
+                          <p className="text-blue-200 text-lg mt-1">
+                            {isRtl ? category.name : category.nameAr}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-8">
+                  {/* Description */}
+                  <p className="text-slate-600 text-lg leading-relaxed mb-8 max-w-4xl">
+                    {isRtl ? category.descriptionAr : category.description}
+                  </p>
+
+                  {/* Features Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {category.features.map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="group flex items-center gap-3 p-4 bg-slate-50 hover:bg-blue-600 rounded-xl transition-all duration-300 cursor-pointer border border-slate-100 hover:border-blue-600 hover:shadow-lg animate-slideUp"
+                        style={{ animationDelay: `${idx * 0.05}s` }}
+                      >
+                        <div className="w-10 h-10 bg-blue-100 group-hover:bg-white/20 text-blue-600 group-hover:text-white flex items-center justify-center rounded-lg transition-all shrink-0">
+                          {feature.icon}
+                        </div>
+                        <span className="font-medium text-slate-700 group-hover:text-white transition-colors text-sm">
+                          {isRtl ? feature.nameAr : feature.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA Button */}
+                  <div className="mt-8 flex justify-center">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:shadow-xl flex items-center gap-3">
+                      {isRtl ? 'اطلب هذه الخدمة' : 'Request This Service'}
+                      <ChevronRight size={20} className={isRtl ? 'rotate-180' : ''} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        ))}
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-br from-blue-600 to-blue-800">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-4xl font-extrabold text-white mb-6">
+              {isRtl ? 'هل تحتاج إلى حل مخصص؟' : 'Need a Custom Solution?'}
+            </h2>
+            <p className="text-blue-100 text-xl mb-8">
+              {isRtl ? 'تواصل معنا لنصمم لك الحل الأمثل لاحتياجاتك' : 'Contact us to design the perfect solution for your needs'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                <Phone size={20} />
+                {isRtl ? 'اتصل بنا' : 'Call Us'}
+              </button>
+              <button className="bg-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-400 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                <Mail size={20} />
+                {isRtl ? 'راسلنا' : 'Email Us'}
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default ServicesPage;

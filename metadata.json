@@ -1,0 +1,7 @@
+{
+  "name": "NirvanaIOT - Smart IoT Solutions",
+  "description": "A professional bilingual website for NirvanaIOT specializing in smart IoT, BMS, and digital systems for modern businesses.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
