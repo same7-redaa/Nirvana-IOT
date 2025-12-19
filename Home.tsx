@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
     Home as HomeIcon, Briefcase, Factory, Cctv, Network, Building2, Calculator,
     ChevronRight, Shield, Eye
@@ -40,6 +41,21 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
         { id: 7, cat: t.catAccounting, icon: <Calculator />, img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2070&auto=format&fit=crop" },
     ];
 
+    const fadeInUp = {
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+    };
+
+    const staggerContainer = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
     return (
         <>
             {/* Hero Section */}
@@ -51,19 +67,24 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                         className={`absolute inset-0 -z-10 bg-cover bg-center transition-opacity duration-1000 ${idx === currentBg ? 'opacity-100' : 'opacity-0'}`}
                         style={{ backgroundImage: `url("${img}")` }}
                     >
-                        <div className="absolute inset-0 bg-black/30"></div>
+                        <div className="absolute inset-0 bg-black/40"></div>
                     </div>
                 ))}
 
                 <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
-                    <div className={`max-w-2xl space-y-6 ${isRtl ? 'text-left mr-auto' : 'text-left'}`}>
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className={`max-w-2xl space-y-6 ${isRtl ? 'text-left mr-auto' : 'text-left'}`}
+                    >
                         <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-[1.1] drop-shadow-2xl">
                             {t.heroHeadline}
                         </h1>
                         <p className="text-xl md:text-2xl text-white/90 leading-relaxed drop-shadow-lg">
                             {t.heroSubheadline}
                         </p>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
@@ -78,7 +99,13 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
-                    <div className="text-center max-w-3xl mx-auto mb-16 space-y-6">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={fadeInUp}
+                        className="text-center max-w-3xl mx-auto mb-16 space-y-6"
+                    >
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-4">
                             <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                             <span className="text-white text-sm font-bold uppercase tracking-wider">
@@ -89,13 +116,20 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                         <p className="text-blue-100 text-lg md:text-xl leading-relaxed font-light opacity-90">
                             {isRtl ? 'نقدّم مجموعة واسعة من خدمات إنترنت الأشياء والأنظمة الذكية للأفراد والمؤسسات لتمكين المستقبل الرقمي.' : 'Providing a comprehensive range of IoT services and smart systems for individuals and enterprises to empower the digital future.'}
                         </p>
-                    </div>
+                    </motion.div>
 
                     {/* Services Grid */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        variants={staggerContainer}
+                        className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16"
+                    >
                         {solutionGroups.map((group, idx) => (
-                            <button
+                            <motion.button
                                 key={idx}
+                                variants={fadeInUp}
                                 onClick={() => navigate('/services', { state: { scrollToId: group.id } })}
                                 className={`group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 text-left h-full shadow-lg
                   ${idx === 0 || idx === 6
@@ -123,9 +157,9 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                                         <ChevronRight size={24} className={`${isRtl ? 'rotate-180' : ''} ${idx === 0 || idx === 6 ? 'text-white' : 'text-blue-600'}`} />
                                     </div>
                                 </div>
-                            </button>
+                            </motion.button>
                         ))}
-                    </div>
+                    </motion.div>
 
                     {/* View All Services Button */}
                     <div className="text-center">
@@ -145,14 +179,26 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
             {/* Products Section */}
             <section id="products" className="py-24 bg-slate-50">
                 <div className="max-w-7xl mx-auto px-4">
-                    <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        variants={fadeInUp}
+                        className="text-center max-w-3xl mx-auto mb-16 space-y-4"
+                    >
                         <h2 className="text-4xl font-extrabold text-slate-900">{isRtl ? 'منتجاتنا' : 'Our Products'}</h2>
                         <p className="text-slate-600 text-lg">
                             {isRtl ? 'اكتشف مجموعتنا المتنوعة من المنتجات الذكية' : 'Discover our diverse range of smart products'}
                         </p>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        variants={staggerContainer}
+                        className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+                    >
                         {[
                             {
                                 id: 1,
@@ -175,7 +221,11 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                                 img: '/products/smart-access.png'
                             }
                         ].map((product, idx) => (
-                            <div key={idx} className="group bg-white border-2 border-blue-600 overflow-hidden flex flex-col">
+                            <motion.div
+                                key={idx}
+                                variants={fadeInUp}
+                                className="group bg-white border-2 border-blue-600 overflow-hidden flex flex-col"
+                            >
                                 <div className="relative h-64 overflow-hidden">
                                     <img
                                         src={product.img}
@@ -195,9 +245,9 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                                         <ChevronRight size={18} className={isRtl ? 'rotate-180' : ''} />
                                     </button>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
 
                     {/* View All Products Button */}
                     <div className="text-center mt-12">
@@ -220,7 +270,13 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
 
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <div className="space-y-8">
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            variants={fadeInUp}
+                            className="space-y-8"
+                        >
                             <div className="inline-block px-4 py-2 bg-blue-600/20 border border-blue-500/30 rounded-full">
                                 <span className="text-blue-400 font-bold tracking-wider uppercase text-sm">
                                     {isRtl ? 'من نحن' : 'Who We Are'}
@@ -249,19 +305,31 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                                     <p className="text-slate-400 text-sm">{t.aboutVisionDesc}</p>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
                         <div className="relative">
-                            <div className="relative rounded-3xl overflow-hidden aspect-square border border-white/10 shadow-2xl">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8 }}
+                                className="relative rounded-3xl overflow-hidden aspect-square border border-white/10 shadow-2xl"
+                            >
                                 <img
                                     src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2032&auto=format&fit=crop"
                                     alt="About Nirvana"
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-slate-900/20"></div>
-                            </div>
+                            </motion.div>
                             {/* Floating Stats Card */}
-                            <div className={`absolute -bottom-8 ${isRtl ? '-right-8' : '-left-8'} bg-white text-slate-900 p-8 rounded-2xl shadow-xl max-w-xs hidden md:block`}>
+                            <motion.div
+                                initial={{ opacity: 0, x: isRtl ? 50 : -50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.3, duration: 0.6 }}
+                                className={`absolute -bottom-8 ${isRtl ? '-right-8' : '-left-8'} bg-white text-slate-900 p-8 rounded-2xl shadow-xl max-w-xs hidden md:block`}
+                            >
                                 <div className="flex items-center gap-4 mb-4">
                                     <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl">
                                         5+
@@ -280,7 +348,7 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                                         <p className="text-slate-500 text-sm">{isRtl ? 'في المملكة' : 'Across KSA'}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
