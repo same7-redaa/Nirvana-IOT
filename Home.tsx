@@ -18,9 +18,9 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
     const [currentBg, setCurrentBg] = useState(0);
 
     const backgroundImages = [
-        '/كاميرا.webp',
-        '/قفل ابواب.jpg',
-        '/مستشعرات.jpg'
+        '/hero-camera.webp',
+        '/hero-lock.jpg',
+        '/hero-sensors.jpg'
     ];
 
     useEffect(() => {
@@ -157,22 +157,22 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                             {
                                 id: 1,
                                 name: isRtl ? 'كاميرات داخلية' : 'Indoor Cameras',
-                                img: '/صور المنتجات/كاميرات داخلية.png'
+                                img: '/products/indoor-cameras.png'
                             },
                             {
                                 id: 2,
                                 name: isRtl ? 'كاميرات خارجية' : 'Outdoor Cameras',
-                                img: '/صور المنتجات/كاميرات خارجية.png'
+                                img: '/products/outdoor-cameras.png'
                             },
                             {
                                 id: 3,
                                 name: isRtl ? 'المستشعرات الذكية' : 'Smart Sensors',
-                                img: '/صور المنتجات/مستشعرات ذكية.png'
+                                img: '/products/smart-sensors.png'
                             },
                             {
                                 id: 4,
                                 name: isRtl ? 'الدخول الذكي' : 'Smart Access',
-                                img: '/صور المنتجات/الدخول الذكي.png'
+                                img: '/products/smart-access.png'
                             }
                         ].map((product, idx) => (
                             <div key={idx} className="group bg-white border-2 border-blue-600 overflow-hidden flex flex-col">

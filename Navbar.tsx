@@ -43,10 +43,10 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
     ];
 
     const productCategories = [
-        { id: 1, name: isRtl ? 'كاميرات داخلية' : 'Indoor Cameras', img: '/صور المنتجات/كاميرات داخلية.png' },
-        { id: 2, name: isRtl ? 'كاميرات خارجية' : 'Outdoor Cameras', img: '/صور المنتجات/كاميرات خارجية.png' },
-        { id: 3, name: isRtl ? 'مستشعرات ذكية' : 'Smart Sensors', img: '/صور المنتجات/مستشعرات ذكية.png' },
-        { id: 4, name: isRtl ? 'الدخول الذكي' : 'Smart Access', img: '/صور المنتجات/الدخول الذكي.png' }
+        { id: 1, name: isRtl ? 'كاميرات داخلية' : 'Indoor Cameras', img: '/products/indoor-cameras.png' },
+        { id: 2, name: isRtl ? 'كاميرات خارجية' : 'Outdoor Cameras', img: '/products/outdoor-cameras.png' },
+        { id: 3, name: isRtl ? 'مستشعرات ذكية' : 'Smart Sensors', img: '/products/smart-sensors.png' },
+        { id: 4, name: isRtl ? 'الدخول الذكي' : 'Smart Access', img: '/products/smart-access.png' }
     ];
 
     // If menu is active, Navbar should be opaque

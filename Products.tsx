@@ -64,7 +64,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
       name: 'Indoor Cameras',
       nameAr: 'كاميرات داخلية',
       icon: <Camera size={32} />,
-      image: '/صور المنتجات/كاميرات داخلية.png',
+      image: '/products/indoor-cameras.png',
       products: [
         {
           id: 101,
@@ -73,7 +73,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'High-definition indoor camera with night vision and motion detection',
           descriptionAr: 'كاميرا داخلية عالية الدقة مع رؤية ليلية وكشف الحركة',
           price: '299 SAR',
-          image: '/صور المنتجات/كاميرات داخلية.png',
+          image: '/products/indoor-cameras.png',
           features: ['1080p HD Resolution', 'Night Vision', 'Motion Detection', 'Two-way Audio', 'Mobile App'],
           featuresAr: ['دقة 1080p عالية الوضوح', 'رؤية ليلية', 'كشف الحركة', 'صوت ثنائي الاتجاه', 'تطبيق جوال']
         },
@@ -84,7 +84,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Pan-tilt-zoom camera with 360° coverage',
           descriptionAr: 'كاميرا متحركة بتغطية 360 درجة',
           price: '449 SAR',
-          image: '/صور المنتجات/كاميرات داخلية.png',
+          image: '/products/indoor-cameras.png',
           features: ['360° Coverage', '2K Resolution', 'Smart Tracking', 'Cloud Storage', 'AI Detection'],
           featuresAr: ['تغطية 360 درجة', 'دقة 2K', 'تتبع ذكي', 'تخزين سحابي', 'كشف بالذكاء الاصطناعي']
         },
@@ -95,7 +95,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Compact camera perfect for small spaces',
           descriptionAr: 'كاميرا مدمجة مثالية للمساحات الصغيرة',
           price: '199 SAR',
-          image: '/صور المنتجات/كاميرات داخلية.png',
+          image: '/products/indoor-cameras.png',
           features: ['720p HD', 'Night Vision', 'Motion Alerts', 'Easy Setup', 'Affordable'],
           featuresAr: ['دقة 720p', 'رؤية ليلية', 'تنبيهات الحركة', 'سهل التركيب', 'سعر مناسب']
         }
@@ -106,7 +106,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
       name: 'Outdoor Cameras',
       nameAr: 'كاميرات خارجية',
       icon: <CameraIcon size={32} />,
-      image: '/صور المنتجات/كاميرات خارجية.png',
+      image: '/products/outdoor-cameras.png',
       products: [
         {
           id: 201,
@@ -115,7 +115,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Premium outdoor camera with 4K resolution and weather resistance',
           descriptionAr: 'كاميرا خارجية فاخرة بدقة 4K ومقاومة للعوامل الجوية',
           price: '699 SAR',
-          image: '/صور المنتجات/كاميرات خارجية.png',
+          image: '/products/outdoor-cameras.png',
           features: ['4K Ultra HD', 'IP67 Waterproof', 'Color Night Vision', 'Smart Alerts', 'Wide Angle'],
           featuresAr: ['دقة 4K فائقة', 'مقاومة للماء IP67', 'رؤية ليلية ملونة', 'تنبيهات ذكية', 'زاوية واسعة']
         },
@@ -126,7 +126,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Eco-friendly solar powered outdoor camera',
           descriptionAr: 'كاميرا خارجية صديقة للبيئة بالطاقة الشمسية',
           price: '849 SAR',
-          image: '/صور المنتجات/كاميرات خارجية.png',
+          image: '/products/outdoor-cameras.png',
           features: ['Solar Panel', '1080p HD', 'No Wiring', 'Long Battery Life', 'Weather Resistant'],
           featuresAr: ['لوح شمسي', 'دقة 1080p', 'بدون أسلاك', 'بطارية طويلة الأمد', 'مقاومة للطقس']
         },
@@ -137,7 +137,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Pan-tilt-zoom outdoor surveillance camera',
           descriptionAr: 'كاميرا مراقبة خارجية قابلة للتحريك والتقريب',
           price: '999 SAR',
-          image: '/صور المنتجات/كاميرات خارجية.png',
+          image: '/products/outdoor-cameras.png',
           features: ['360° Rotation', '5X Optical Zoom', 'Auto Tracking', '2K Resolution', 'Weatherproof'],
           featuresAr: ['دوران 360 درجة', 'تقريب بصري 5X', 'تتبع تلقائي', 'دقة 2K', 'مقاومة للعوامل الجوية']
         }
@@ -148,7 +148,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
       name: 'Smart Sensors',
       nameAr: 'مستشعرات ذكية',
       icon: <Radio size={32} />,
-      image: '/صور المنتجات/مستشعرات ذكية.png',
+      image: '/products/smart-sensors.png',
       products: [
         {
           id: 301,
@@ -157,7 +157,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Advanced PIR motion sensor with smart detection',
           descriptionAr: 'مستشعر حركة متقدم مع كشف ذكي',
           price: '149 SAR',
-          image: '/صور المنتجات/مستشعرات ذكية.png',
+          image: '/products/smart-sensors.png',
           features: ['PIR Technology', 'Adjustable Sensitivity', 'Wide Coverage', 'Battery Powered', 'Instant Alerts'],
           featuresAr: ['تقنية PIR', 'حساسية قابلة للتعديل', 'تغطية واسعة', 'يعمل بالبطارية', 'تنبيهات فورية']
         },
@@ -168,7 +168,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Magnetic sensor for doors and windows',
           descriptionAr: 'مستشعر مغناطيسي للأبواب والنوافذ',
           price: '99 SAR',
-          image: '/صور المنتجات/مستشعرات ذكية.png',
+          image: '/products/smart-sensors.png',
           features: ['Magnetic Contact', 'Wireless', 'Low Battery Alert', 'Easy Install', 'Compact Design'],
           featuresAr: ['اتصال مغناطيسي', 'لاسلكي', 'تنبيه البطارية المنخفضة', 'سهل التركيب', 'تصميم مدمج']
         },
@@ -179,7 +179,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Smart smoke and fire detection system',
           descriptionAr: 'نظام ذكي لكشف الدخان والحريق',
           price: '199 SAR',
-          image: '/صور المنتجات/مستشعرات ذكية.png',
+          image: '/products/smart-sensors.png',
           features: ['Photoelectric Sensor', 'Loud Alarm', 'Self-Test', 'Mobile Alerts', '10-Year Battery'],
           featuresAr: ['مستشعر ضوئي', 'إنذار عالي', 'اختبار ذاتي', 'تنبيهات الجوال', 'بطارية 10 سنوات']
         },
@@ -190,7 +190,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Prevent water damage with instant detection',
           descriptionAr: 'منع أضرار المياه مع الكشف الفوري',
           price: '129 SAR',
-          image: '/صور المنتجات/مستشعرات ذكية.png',
+          image: '/products/smart-sensors.png',
           features: ['Water Detection', 'Loud Siren', 'Mobile Alerts', 'Battery Powered', 'Compact'],
           featuresAr: ['كشف المياه', 'صفارة عالية', 'تنبيهات الجوال', 'يعمل بالبطارية', 'صغير الحجم']
         }
@@ -201,7 +201,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
       name: 'Smart Access Control',
       nameAr: 'الدخول الذكي',
       icon: <Lock size={32} />,
-      image: '/صور المنتجات/الدخول الذكي.png',
+      image: '/products/smart-access.png',
       products: [
         {
           id: 401,
@@ -210,7 +210,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Advanced biometric door lock with fingerprint access',
           descriptionAr: 'قفل باب بيومتري متقدم بالبصمة',
           price: '899 SAR',
-          image: '/صور المنتجات/الدخول الذكي.png',
+          image: '/products/smart-access.png',
           features: ['Fingerprint Recognition', 'PIN Code', 'RFID Card', 'Mobile App', 'Auto Lock'],
           featuresAr: ['التعرف على البصمة', 'رمز PIN', 'بطاقة RFID', 'تطبيق جوال', 'قفل تلقائي']
         },
@@ -221,7 +221,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Keyless entry with multiple access methods',
           descriptionAr: 'دخول بدون مفتاح مع طرق وصول متعددة',
           price: '749 SAR',
-          image: '/صور المنتجات/الدخول الذكي.png',
+          image: '/products/smart-access.png',
           features: ['Keyless Entry', 'Bluetooth', 'PIN Codes', 'Remote Access', 'Battery Backup'],
           featuresAr: ['دخول بدون مفتاح', 'بلوتوث', 'رموز PIN', 'وصول عن بعد', 'بطارية احتياطية']
         },
@@ -232,7 +232,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Smart doorbell with HD video and two-way audio',
           descriptionAr: 'جرس باب ذكي مع فيديو HD وصوت ثنائي',
           price: '599 SAR',
-          image: '/صور المنتجات/الدخول الذكي.png',
+          image: '/products/smart-access.png',
           features: ['1080p Video', 'Two-way Talk', 'Motion Detection', 'Night Vision', 'Cloud Storage'],
           featuresAr: ['فيديو 1080p', 'محادثة ثنائية', 'كشف الحركة', 'رؤية ليلية', 'تخزين سحابي']
         },
@@ -243,7 +243,7 @@ const ProductsPage: React.FC<{ lang: Language }> = ({ lang }) => {
           description: 'Simple and secure keypad entry system',
           descriptionAr: 'نظام دخول بسيط وآمن بلوحة المفاتيح',
           price: '499 SAR',
-          image: '/صور المنتجات/الدخول الذكي.png',
+          image: '/products/smart-access.png',
           features: ['PIN Entry', 'Multiple Codes', 'Auto Lock', 'Low Battery Alert', 'Easy Install'],
           featuresAr: ['إدخال PIN', 'رموز متعددة', 'قفل تلقائي', 'تنبيه بطارية منخفضة', 'تركيب سهل']
         }
