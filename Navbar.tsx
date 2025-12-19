@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
     Menu, Globe, ChevronRight, Home, Briefcase, Factory,
     Cctv, Network, Building2, Calculator
@@ -18,6 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
     const [activeMenu, setActiveMenu] = useState<'services' | 'products' | null>(null);
     const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const t = TRANSLATIONS[lang];
     const isRtl = lang === 'ar';
@@ -49,8 +50,13 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
         { id: 4, name: isRtl ? 'الدخول الذكي' : 'Smart Access', img: '/products/smart-access.png' }
     ];
 
-    // If menu is active, Navbar should be opaque
-    const isNavbarOpaque = scrolled || isScrolledOrAlwaysOpaque || activeMenu !== null || isMenuOpen;
+    // Check if current page is Home. If not, always opaque.
+    const isHomePage = location.pathname === '/';
+    const effectiveIsOpaque = scrolled || isScrolledOrAlwaysOpaque || activeMenu !== null || isMenuOpen || !isHomePage;
+
+    const textColorClass = effectiveIsOpaque ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200 drop-shadow-md';
+    const logoColorClass = effectiveIsOpaque ? 'text-slate-900' : 'text-white drop-shadow-md';
+    const buttonBgClass = effectiveIsOpaque ? 'bg-slate-100 text-slate-800 hover:bg-slate-200' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm';
 
     const handleMouseLeaveNav = () => {
         setActiveMenu(null);
@@ -58,7 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${isNavbarOpaque ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}
+            className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${effectiveIsOpaque ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}
             dir={isRtl ? 'rtl' : 'ltr'}
             onMouseLeave={handleMouseLeaveNav}
         >
@@ -66,19 +72,21 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                 {/* Logo */}
                 <button onClick={() => navigate('/')} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                     <img src="/logo.png" alt="Nirvana IOT Logo" className="w-14 h-14 object-contain" />
-                    <span className="text-2xl font-extrabold tracking-tight text-slate-900">Nirvana <span className="text-blue-600">IOT</span></span>
+                    <span className={`text-2xl font-extrabold tracking-tight transition-colors ${logoColorClass}`}>
+                        Nirvana <span className={effectiveIsOpaque ? 'text-blue-600' : 'text-blue-400'}>IOT</span>
+                    </span>
                 </button>
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-8">
-                    <button onClick={() => navigate('/')} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
+                    <button onClick={() => navigate('/')} className={`transition-colors font-medium ${textColorClass}`}>
                         {t.navHome}
                     </button>
 
                     <button
                         onClick={() => navigate('/services')}
                         onMouseEnter={() => setActiveMenu('services')}
-                        className={`text-slate-700 hover:text-blue-600 transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'services' ? 'text-blue-600' : ''}`}
+                        className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'services' ? 'text-blue-600' : textColorClass}`}
                     >
                         {isRtl ? 'خدماتنا' : 'Services'}
                     </button>
@@ -86,16 +94,16 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                     <button
                         onClick={() => navigate('/products')}
                         onMouseEnter={() => setActiveMenu('products')}
-                        className={`text-slate-700 hover:text-blue-600 transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'products' ? 'text-blue-600' : ''}`}
+                        className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'products' ? 'text-blue-600' : textColorClass}`}
                     >
                         {isRtl ? 'منتجاتنا' : 'Products'}
                     </button>
 
-                    <button onClick={() => navigate('/contact')} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">{t.navContact}</button>
+                    <button onClick={() => navigate('/contact')} className={`transition-colors font-medium ${textColorClass}`}>{t.navContact}</button>
 
                     <button
                         onClick={toggleLang}
-                        className="flex items-center gap-2 bg-slate-100 px-4 py-2 hover:bg-slate-200 transition-all font-bold text-sm rounded-lg text-slate-800"
+                        className={`flex items-center gap-2 px-4 py-2 transition-all font-bold text-sm rounded-lg ${buttonBgClass}`}
                     >
                         <Globe size={18} />
                         {lang === 'en' ? 'العربية' : 'English'}
@@ -104,8 +112,8 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
 
                 {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center gap-4">
-                    <button onClick={toggleLang} className="p-2 bg-slate-100 rounded-lg text-slate-800"><Globe size={20} /></button>
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-slate-800"><Menu /></button>
+                    <button onClick={toggleLang} className={`p-2 rounded-lg ${buttonBgClass}`}><Globe size={20} /></button>
+                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`p-2 rounded-lg ${buttonBgClass}`}><Menu /></button>
                 </div>
             </div>
 
