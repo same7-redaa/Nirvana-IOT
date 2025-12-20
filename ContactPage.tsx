@@ -96,12 +96,19 @@ const ContactPage: React.FC<ContactPageProps> = ({ lang }) => {
                                         placeholder={t.contactName}
                                         type="text"
                                         required
-                                        className="w-full bg-brand-bg border border-brand-border px-4 py-4 rounded-lg focus:ring-2 focus:ring-brand-primary outline-none transition-all text-brand-text placeholder-brand-muted/50"
+                                        className="w-full bg-brand-bg border border-brand-border px-4 py-4 rounded-lg focus:ring-2 focus:ring-brand-primary outline-none transition-all text-brand-text placeholder-brand-muted/50 md:col-span-2"
                                     />
                                     <input
                                         name="user_email"
                                         placeholder={t.contactEmail}
                                         type="email"
+                                        required
+                                        className="w-full bg-brand-bg border border-brand-border px-4 py-4 rounded-lg focus:ring-2 focus:ring-brand-primary outline-none transition-all text-brand-text placeholder-brand-muted/50"
+                                    />
+                                    <input
+                                        name="user_phone"
+                                        placeholder={isRtl ? 'رقم الهاتف' : 'Phone Number'}
+                                        type="tel"
                                         required
                                         className="w-full bg-brand-bg border border-brand-border px-4 py-4 rounded-lg focus:ring-2 focus:ring-brand-primary outline-none transition-all text-brand-text placeholder-brand-muted/50"
                                     />
