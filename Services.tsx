@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, Briefcase, Factory, Cctv, Network, Building2, Calculator, ChevronRight, Phone, Mail, Shield, Zap, Wifi, Lock, Eye, Thermometer, Lightbulb, DoorOpen, Car, Users, Flame, Wind, Gauge, Warehouse, Server, Settings, GraduationCap, Link, Package } from 'lucide-react';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { db } from './src/firebase';
 
 type Language = 'en' | 'ar';
 
@@ -15,11 +17,59 @@ interface ServiceCategory {
   features: { name: string; nameAr: string; icon: React.ReactNode }[];
 }
 
+interface Product {
+  id: string;
+  name: string;
+  nameAr: string;
+  description: string;
+  descriptionAr: string;
+  price: string;
+  image: string;
+
+}
+
 const ServicesPage: React.FC<{ lang: Language }> = ({ lang }) => {
   const isRtl = lang === 'ar';
   const location = useLocation();
+  const navigate = useNavigate();
   const scrollToCategoryId = location.state?.scrollToId;
 
+  // State for dynamic products
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [serviceLinks, setServiceLinks] = useState<Record<string, string[]>>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 1. Fetch All Products (via Categories)
+        const catSnap = await getDocs(collection(db, 'categories'));
+        let products: Product[] = [];
+        catSnap.forEach(doc => {
+          const data = doc.data();
+          if (data.products) {
+            products = [...products, ...data.products];
+          }
+        });
+        setAllProducts(products);
+
+        // 2. Fetch Service Links
+        const linkSnap = await getDocs(collection(db, 'service_products'));
+        const links: Record<string, string[]> = {};
+        linkSnap.forEach(doc => {
+          // doc.id is like "service_1"
+          const serviceId = doc.id.replace('service_', '');
+          links[serviceId] = doc.data().productIds || [];
+        });
+        setServiceLinks(links);
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // ... scroll logic ...
   // Scroll to top when component mounts OR scroll to specific category
   useEffect(() => {
     if (scrollToCategoryId) {
@@ -48,6 +98,7 @@ const ServicesPage: React.FC<{ lang: Language }> = ({ lang }) => {
     }
   };
 
+  // ... categories definition ...
   const categories: ServiceCategory[] = [
     {
       id: 1,
@@ -176,9 +227,10 @@ const ServicesPage: React.FC<{ lang: Language }> = ({ lang }) => {
   ];
 
   return (
-    <div className={`min-h-screen bg-slate-50`}>
+    <div className={`min-h-screen bg-brand-bg`}>
       {/* Hero Section */}
-      <div className="relative pt-24 pb-16 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+      <div className="relative pt-24 pb-16 bg-gradient-to-br from-brand-text via-slate-900 to-brand-text overflow-hidden">
+        {/* ... (keep hero content) ... */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)',
@@ -190,7 +242,7 @@ const ServicesPage: React.FC<{ lang: Language }> = ({ lang }) => {
           <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 animate-fadeIn">
             {isRtl ? 'خدماتنا المتكاملة' : 'Our Complete Services'}
           </h1>
-          <p className="text-blue-100 text-xl max-w-2xl mx-auto animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+          <p className="text-white/90 text-xl max-w-2xl mx-auto animate-fadeIn" style={{ animationDelay: '0.1s' }}>
             {isRtl ? 'حلول تقنية متطورة لتحويل أعمالك إلى بيئة ذكية ومتصلة' : 'Advanced technology solutions to transform your business into a smart, connected environment'}
           </p>
         </div>
@@ -198,97 +250,139 @@ const ServicesPage: React.FC<{ lang: Language }> = ({ lang }) => {
 
       <div className="py-12">
         {/* Categories with Full Width Display */}
-        {categories.map((category, index) => (
-          <section
-            key={category.id}
-            id={`service-category-${category.id}`}
-            className={`py-16 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}
-          >
-            <div className="max-w-7xl mx-auto px-4">
-              {/* Category Card */}
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 animate-fadeIn">
-                {/* Header with Image */}
-                <div className="relative h-64 md:h-80 overflow-hidden">
-                  <img
-                    src={category.image}
-                    alt={isRtl ? category.nameAr : category.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20"></div>
+        {categories.map((category, index) => {
+          // Get linked products for this service
+          const linkedIds = serviceLinks[category.id.toString()] || [];
+          const linkedProducts = allProducts.filter(p => linkedIds.includes(p.id));
 
-                  {/* Title Overlay */}
-                  <div className="absolute inset-0 flex items-end">
-                    <div className="p-8 w-full">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-2xl shadow-lg">
-                          {category.icon}
-                        </div>
-                        <div>
-                          <h2 className="text-3xl md:text-4xl font-extrabold text-white">
-                            {isRtl ? category.nameAr : category.name}
-                          </h2>
-                          <p className="text-blue-200 text-lg mt-1">
-                            {isRtl ? category.name : category.nameAr}
-                          </p>
+          return (
+            <section
+              key={category.id}
+              id={`service-category-${category.id}`}
+              className={`py-16 ${index % 2 === 0 ? 'bg-brand-bg' : 'bg-brand-bg/50'}`}
+            >
+              <div className="max-w-7xl mx-auto px-4">
+                {/* Category Card */}
+                <div className="bg-brand-card rounded-3xl shadow-2xl overflow-hidden border border-brand-primary/20 animate-fadeIn">
+                  {/* Header with Image */}
+                  <div className="relative h-64 md:h-80 overflow-hidden">
+                    <img
+                      src={category.image}
+                      alt={isRtl ? category.nameAr : category.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20"></div>
+
+                    {/* Title Overlay */}
+                    <div className="absolute inset-0 flex items-end">
+                      <div className="p-8 w-full">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-16 h-16 bg-brand-primary text-white flex items-center justify-center rounded-2xl shadow-lg">
+                            {category.icon}
+                          </div>
+                          <div>
+                            <h2 className="text-3xl md:text-4xl font-extrabold text-white">
+                              {isRtl ? category.nameAr : category.name}
+                            </h2>
+                            <p className="text-white/80 text-lg mt-1">
+                              {isRtl ? category.name : category.nameAr}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Content */}
-                <div className="p-8">
-                  {/* Description */}
-                  <p className="text-slate-600 text-lg leading-relaxed mb-8 max-w-4xl">
-                    {isRtl ? category.descriptionAr : category.description}
-                  </p>
+                  {/* Content */}
+                  <div className="p-8">
+                    {/* Description */}
+                    <p className="text-brand-text text-lg leading-relaxed mb-8 max-w-4xl">
+                      {isRtl ? category.descriptionAr : category.description}
+                    </p>
 
-                  {/* Features Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {category.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="group flex items-center gap-3 p-4 bg-slate-50 hover:bg-blue-600 rounded-xl transition-all duration-300 cursor-pointer border border-slate-100 hover:border-blue-600 hover:shadow-lg animate-slideUp"
-                        style={{ animationDelay: `${idx * 0.05}s` }}
-                      >
-                        <div className="w-10 h-10 bg-blue-100 group-hover:bg-white/20 text-blue-600 group-hover:text-white flex items-center justify-center rounded-lg transition-all shrink-0">
-                          {feature.icon}
+                    {/* Features Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+                      {category.features.map((feature, idx) => (
+                        <div
+                          key={idx}
+                          className="group flex items-center gap-3 p-4 bg-brand-bg hover:bg-brand-primary rounded-xl transition-all duration-300 cursor-pointer border border-transparent hover:border-brand-primary/50 hover:shadow-lg"
+                        >
+                          <div className="w-10 h-10 bg-brand-primary/20 group-hover:bg-white/20 text-brand-primary group-hover:text-white flex items-center justify-center rounded-lg transition-all shrink-0">
+                            {feature.icon}
+                          </div>
+                          <span className="font-medium text-brand-text group-hover:text-white transition-colors text-sm">
+                            {isRtl ? feature.nameAr : feature.name}
+                          </span>
                         </div>
-                        <span className="font-medium text-slate-700 group-hover:text-white transition-colors text-sm">
-                          {isRtl ? feature.nameAr : feature.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
 
-                  {/* CTA Button */}
-                  <div className="mt-8 flex justify-center">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:shadow-xl flex items-center gap-3">
-                      {isRtl ? 'اطلب هذه الخدمة' : 'Request This Service'}
-                      <ChevronRight size={20} className={isRtl ? 'rotate-180' : ''} />
-                    </button>
+                    {/* Linked Products Carousel/Grid */}
+                    {linkedProducts.length > 0 && (
+                      <div className="mt-10 pt-10 border-t border-brand-border/30">
+                        <h3 className="text-xl font-bold text-brand-text mb-6 flex items-center gap-2">
+                          <Package className="text-brand-primary" />
+                          {isRtl ? 'منتجات ذات صلة بهذه الخدمة' : 'Products Used in This Service'}
+                        </h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                          {linkedProducts.map(product => (
+                            <div key={product.id} className="bg-brand-bg rounded-xl p-3 border border-brand-border/20 hover:border-brand-primary hover:shadow-lg transition-all group">
+                              <div className="h-40 overflow-hidden rounded-lg mb-3 bg-white">
+                                <img src={product.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                              </div>
+                              <div
+                                onClick={() => navigate('/contact', { state: { inquiryType: 'Product', name: isRtl ? product.nameAr : product.name } })}
+                                className="font-bold text-brand-text text-sm mb-1 line-clamp-2 hover:text-brand-primary block cursor-pointer"
+                              >
+                                {isRtl ? product.nameAr : product.name}
+                              </div>
+                              <div className="flex justify-between items-center mt-2">
+                                <span className="text-brand-primary font-bold text-xs">{product.price}</span>
+                                <span className="text-xs bg-brand-primary/10 text-brand-primary px-2 py-1 rounded-full">
+                                  {isRtl ? 'اطلب' : 'Order'}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CTA Button */}
+                    <div className="mt-8 flex justify-center">
+                      <button
+                        onClick={() => navigate('/contact', { state: { inquiryType: 'Service', name: isRtl ? category.nameAr : category.name } })}
+                        className="bg-brand-primary hover:bg-brand-primary/90 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:shadow-xl flex items-center gap-3"
+                      >
+                        {isRtl ? 'اطلب هذه الخدمة' : 'Request This Service'}
+                        <ChevronRight size={20} className={isRtl ? 'rotate-180' : ''} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-        ))}
+            </section>
+          );
+        })}
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-br from-blue-600 to-blue-800">
+        <section className="py-20 bg-brand-primary">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-extrabold text-white mb-6">
               {isRtl ? 'هل تحتاج إلى حل مخصص؟' : 'Need a Custom Solution?'}
             </h2>
-            <p className="text-blue-100 text-xl mb-8">
+            <p className="text-white/90 text-xl mb-8">
               {isRtl ? 'تواصل معنا لنصمم لك الحل الأمثل لاحتياجاتك' : 'Contact us to design the perfect solution for your needs'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+              <a href="tel:+966533461133" className="bg-white text-brand-primary px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-bg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
                 <Phone size={20} />
                 {isRtl ? 'اتصل بنا' : 'Call Us'}
-              </button>
-              <button className="bg-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-400 transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+              </a>
+              <button
+                onClick={() => navigate('/contact')}
+                className="bg-brand-text text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-black transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              >
                 <Mail size={20} />
                 {isRtl ? 'راسلنا' : 'Email Us'}
               </button>

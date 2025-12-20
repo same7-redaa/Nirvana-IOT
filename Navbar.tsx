@@ -54,9 +54,9 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
     const isHomePage = location.pathname === '/';
     const effectiveIsOpaque = scrolled || isScrolledOrAlwaysOpaque || activeMenu !== null || isMenuOpen || !isHomePage;
 
-    const textColorClass = effectiveIsOpaque ? 'text-slate-700 hover:text-blue-600' : 'text-white hover:text-blue-200 drop-shadow-md';
-    const logoColorClass = effectiveIsOpaque ? 'text-slate-900' : 'text-white drop-shadow-md';
-    const buttonBgClass = effectiveIsOpaque ? 'bg-slate-100 text-slate-800 hover:bg-slate-200' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm';
+    const textColorClass = effectiveIsOpaque ? 'text-brand-text hover:text-brand-primary' : 'text-white hover:text-brand-primary drop-shadow-md';
+    const logoColorClass = effectiveIsOpaque ? 'text-brand-text' : 'text-white drop-shadow-md';
+    const buttonBgClass = effectiveIsOpaque ? 'bg-brand-bg text-brand-text hover:bg-brand-card' : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm';
 
     const handleMouseLeaveNav = () => {
         setActiveMenu(null);
@@ -64,17 +64,19 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${effectiveIsOpaque ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}
+            className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ${effectiveIsOpaque ? 'bg-brand-card/95 backdrop-blur-md shadow-sm py-2' : 'bg-transparent py-4'}`}
             dir={isRtl ? 'rtl' : 'ltr'}
             onMouseLeave={handleMouseLeaveNav}
         >
-            <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative z-20">
+            <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative z-20 h-16">
                 {/* Logo */}
-                <button onClick={() => navigate('/')} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <img src="/logo.png" alt="Nirvana IOT Logo" className="w-14 h-14 object-contain" />
-                    <span className={`text-2xl font-extrabold tracking-tight transition-colors ${logoColorClass}`}>
-                        Nirvana <span className={effectiveIsOpaque ? 'text-blue-600' : 'text-blue-400'}>IOT</span>
-                    </span>
+                <button onClick={() => navigate('/')} className="relative w-32 h-full flex items-center hover:opacity-80 transition-opacity">
+                    <img
+                        src="/logo.png"
+                        alt="Nirvana IOT Logo"
+                        className="absolute top-1/2 -translate-y-1/2 w-40 h-40 max-w-none object-contain drop-shadow-xl"
+                        style={{ left: isRtl ? 'auto' : '-20px', right: isRtl ? '-20px' : 'auto' }}
+                    />
                 </button>
 
                 {/* Desktop Navigation */}
@@ -86,7 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                     <button
                         onClick={() => navigate('/services')}
                         onMouseEnter={() => setActiveMenu('services')}
-                        className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'services' ? 'text-blue-600' : textColorClass}`}
+                        className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'services' ? 'text-brand-primary' : textColorClass}`}
                     >
                         {isRtl ? 'خدماتنا' : 'Services'}
                     </button>
@@ -94,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                     <button
                         onClick={() => navigate('/products')}
                         onMouseEnter={() => setActiveMenu('products')}
-                        className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'products' ? 'text-blue-600' : textColorClass}`}
+                        className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'products' ? 'text-brand-primary' : textColorClass}`}
                     >
                         {isRtl ? 'منتجاتنا' : 'Products'}
                     </button>
@@ -119,7 +121,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
 
             {/* Services Mega Menu - Full Width, Absolute to Nav */}
             <div
-                className={`absolute top-full left-0 w-full bg-white shadow-xl border-t-2 border-blue-600 py-8 transition-all duration-200 origin-top
+                className={`absolute top-full left-0 w-full bg-brand-card shadow-xl border-t-2 border-brand-primary py-8 transition-all duration-200 origin-top
           ${activeMenu === 'services' ? 'opacity-100 visible scale-y-100' : 'opacity-0 invisible scale-y-95 pointer-events-none'}`}
                 style={{ zIndex: 10 }}
                 onMouseEnter={() => setActiveMenu('services')}
@@ -133,12 +135,12 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                                     navigate('/services', { state: { scrollToId: group.id } });
                                     setActiveMenu(null);
                                 }}
-                                className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors group/item border border-transparent hover:border-blue-200 w-full text-left rounded-xl"
+                                className="flex items-center gap-3 px-4 py-3 hover:bg-brand-primary/10 transition-colors group/item border border-transparent hover:border-brand-primary/30 w-full text-left rounded-xl"
                             >
-                                <div className="w-12 h-12 bg-blue-600 text-white flex items-center justify-center shrink-0 group-hover/item:bg-blue-700 transition-colors rounded-lg shadow-md">
+                                <div className="w-12 h-12 bg-brand-primary text-white flex items-center justify-center shrink-0 group-hover/item:bg-brand-primary/80 transition-colors rounded-lg shadow-md">
                                     {React.cloneElement(group.icon, { size: 24 })}
                                 </div>
-                                <span className="font-bold text-slate-900 group-hover/item:text-blue-600 transition-colors text-base">
+                                <span className="font-bold text-brand-text group-hover/item:text-brand-primary transition-colors text-base">
                                     {group.title}
                                 </span>
                             </button>
@@ -149,7 +151,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
 
             {/* Products Mega Menu - Full Width, Absolute to Nav */}
             <div
-                className={`absolute top-full left-0 w-full bg-white shadow-xl border-t-2 border-blue-600 py-8 transition-all duration-200 origin-top
+                className={`absolute top-full left-0 w-full bg-brand-card shadow-xl border-t-2 border-brand-primary py-8 transition-all duration-200 origin-top
           ${activeMenu === 'products' ? 'opacity-100 visible scale-y-100' : 'opacity-0 invisible scale-y-95 pointer-events-none'}`}
                 style={{ zIndex: 10 }}
                 onMouseEnter={() => setActiveMenu('products')}
@@ -163,7 +165,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                                     navigate('/products', { state: { scrollToId: product.id } });
                                     setActiveMenu(null);
                                 }}
-                                className="group overflow-hidden rounded-xl border-2 border-slate-100 hover:border-blue-500 transition-all hover:shadow-lg"
+                                className="group overflow-hidden rounded-xl border-2 border-brand-bg hover:border-brand-primary transition-all hover:shadow-lg"
                             >
                                 <div className="relative h-40 overflow-hidden">
                                     <img
@@ -186,16 +188,16 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
 
             {/* Mobile Menu Content */}
             {isMenuOpen && (
-                <div className="md:hidden bg-white border-t shadow-lg absolute top-full left-0 right-0 z-50 max-h-[80vh] overflow-y-auto">
+                <div className="md:hidden bg-brand-card border-t border-brand-border shadow-lg absolute top-full left-0 right-0 z-50 max-h-[80vh] overflow-y-auto">
                     <div className="p-4 space-y-4">
-                        <button onClick={() => { navigate('/'); setIsMenuOpen(false); }} className="block w-full text-left py-2 text-blue-600 font-bold bg-blue-50 px-3 rounded-lg">
+                        <button onClick={() => { navigate('/'); setIsMenuOpen(false); }} className="block w-full text-left py-2 text-brand-primary font-bold bg-brand-bg px-3 rounded-lg">
                             {t.navHome}
                         </button>
 
-                        <div className="border-t border-slate-100 pt-4">
+                        <div className="border-t border-brand-border pt-4">
                             <button
                                 onClick={() => { navigate('/services'); setIsMenuOpen(false); }}
-                                className="block w-full text-left py-2 font-bold hover:text-blue-600 mb-2 px-3"
+                                className="block w-full text-left py-2 font-bold hover:text-brand-primary mb-2 px-3 text-brand-text"
                             >
                                 {isRtl ? 'خدماتنا' : 'Services'}
                             </button>
@@ -204,7 +206,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                                     <button
                                         key={g.id}
                                         onClick={() => { navigate('/services', { state: { scrollToId: g.id } }); setIsMenuOpen(false); }}
-                                        className="text-left text-sm text-slate-600 py-2 px-3 hover:bg-slate-50 rounded-lg flex items-center gap-2"
+                                        className="text-left text-sm text-brand-muted py-2 px-3 hover:bg-brand-bg rounded-lg flex items-center gap-2"
                                     >
                                         {React.cloneElement(g.icon, { size: 16 })}
                                         {g.title}
@@ -213,10 +215,10 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                             </div>
                         </div>
 
-                        <div className="border-t border-slate-100 pt-4">
+                        <div className="border-t border-brand-border pt-4">
                             <button
                                 onClick={() => { navigate('/products'); setIsMenuOpen(false); }}
-                                className="block w-full text-left py-2 font-bold hover:text-blue-600 mb-2 px-3"
+                                className="block w-full text-left py-2 font-bold hover:text-brand-primary mb-2 px-3 text-brand-text"
                             >
                                 {isRtl ? 'منتجاتنا' : 'Products'}
                             </button>
@@ -225,7 +227,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                                     <button
                                         key={p.id}
                                         onClick={() => { navigate('/products', { state: { scrollToId: p.id } }); setIsMenuOpen(false); }}
-                                        className="text-left text-sm text-slate-600 py-2 px-3 hover:bg-slate-50 rounded-lg"
+                                        className="text-left text-sm text-brand-muted py-2 px-3 hover:bg-brand-bg rounded-lg"
                                     >
                                         {p.name}
                                     </button>
@@ -233,7 +235,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                             </div>
                         </div>
 
-                        <button onClick={() => { navigate('/contact'); setIsMenuOpen(false); }} className="block w-full text-left py-2 hover:text-blue-600 font-medium border-t border-slate-100 pt-4 px-3">
+                        <button onClick={() => { navigate('/contact'); setIsMenuOpen(false); }} className="block w-full text-left py-2 hover:text-brand-primary font-medium border-t border-brand-border pt-4 px-3 text-brand-text">
                             {t.navContact}
                         </button>
                     </div>
