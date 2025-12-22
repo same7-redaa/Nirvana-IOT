@@ -108,7 +108,7 @@ const AppContent: React.FC = () => {
                 <img
                   src="/logo.png"
                   alt="Nirvana IOT Logo"
-                  className="absolute w-56 h-56 max-w-none object-contain drop-shadow-lg"
+                  className="absolute w-56 h-56 max-w-none object-contain"
                   style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
                 />
               </div>

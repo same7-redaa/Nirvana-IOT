@@ -74,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                     <img
                         src="/logo.png"
                         alt="Nirvana IOT Logo"
-                        className="absolute top-1/2 -translate-y-1/2 w-64 h-64 max-w-none object-contain drop-shadow-xl"
+                        className="absolute top-1/2 -translate-y-1/2 w-56 h-56 max-w-none object-contain"
                         style={{ left: isRtl ? 'auto' : '-40px', right: isRtl ? '-40px' : 'auto' }}
                     />
                 </button>

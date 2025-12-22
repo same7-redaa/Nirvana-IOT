@@ -189,7 +189,7 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
                         className={`max-w-2xl space-y-6 ${isRtl ? 'text-left mr-auto' : 'text-left'}`}
                     >
                         <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-[1.1] drop-shadow-2xl">
-                            {t.heroHeadline}
+                            Nirvana <span className="text-[#fb8137]">IOT</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-white/90 leading-relaxed drop-shadow-lg">
                             {t.heroSubheadline}
