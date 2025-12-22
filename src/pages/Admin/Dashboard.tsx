@@ -40,6 +40,28 @@ interface Category {
     iconName?: string; // We'll store icon name instead of component for DB
 }
 
+// Helper to convert Google Drive links to direct view links
+const convertGoogleDriveLink = (url: string) => {
+    if (!url) return '';
+
+    // Regular expression to extract the file ID from various Google Drive URL formats
+    const patterns = [
+        /\/file\/d\/([a-zA-Z0-9_-]+)/, // /file/d/ID
+        /id=([a-zA-Z0-9_-]+)/,          // id=ID
+        /\/open\?id=([a-zA-Z0-9_-]+)/   // /open?id=ID
+    ];
+
+    for (const pattern of patterns) {
+        const match = url.match(pattern);
+        if (match && match[1]) {
+            // Return the direct view URL
+            return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`; // Using thumbnail for better performance/reliability than uc?export=view
+        }
+    }
+
+    return url;
+};
+
 const Dashboard: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
@@ -52,16 +74,6 @@ const Dashboard: React.FC = () => {
     const [linkedProductIds, setLinkedProductIds] = useState<string[]>([]);
 
     const navigate = useNavigate();
-
-    // Initial Seed Data (from existing Products.tsx) - Simplified for brevity
-    // This function can be called manually to populate DB first time
-    const seedDatabase = async () => {
-        if (!confirm("This will overwrite/duplicate data in Firestore. Continue?")) return;
-        const batch = writeBatch(db);
-
-        // Example seed logic - meaningful implementation requires mapping existing hardcoded data
-        // For now, let's just fetch existing.
-    };
 
     const fetchCategories = async () => {
         setLoading(true);
@@ -94,6 +106,8 @@ const Dashboard: React.FC = () => {
         e.preventDefault();
         if (!editingCategory) return;
 
+        const processedImage = convertGoogleDriveLink(editingCategory.image);
+
         try {
             if (editingCategory.id) {
                 // Update
@@ -101,14 +115,14 @@ const Dashboard: React.FC = () => {
                 await updateDoc(catRef, {
                     name: editingCategory.name,
                     nameAr: editingCategory.nameAr,
-                    image: editingCategory.image
+                    image: processedImage
                 });
             } else {
                 // Create New
                 await addDoc(collection(db, 'categories'), {
                     name: editingCategory.name,
                     nameAr: editingCategory.nameAr,
-                    image: editingCategory.image,
+                    image: processedImage,
                     displayId: editingCategory.displayId,
                     products: [],
                     iconName: 'Box' // Default icon
@@ -146,18 +160,21 @@ const Dashboard: React.FC = () => {
 
         if (!targetProduct || !catId) return;
 
+        const processedImage = convertGoogleDriveLink(targetProduct.image);
+        const finalProduct = { ...targetProduct, image: processedImage };
+
         try {
             const category = categories.find(c => c.id === catId);
             if (!category) return;
 
             let updatedProducts = [...(category.products || [])];
 
-            if (targetProduct.id) {
+            if (finalProduct.id) {
                 // Update existing product
-                updatedProducts = updatedProducts.map(p => p.id === targetProduct.id ? targetProduct : p);
+                updatedProducts = updatedProducts.map(p => p.id === finalProduct.id ? finalProduct : p);
             } else {
                 // Add new product
-                const newProd = { ...targetProduct, id: Date.now().toString() };
+                const newProd = { ...finalProduct, id: Date.now().toString() };
                 updatedProducts.push(newProd);
             }
 
@@ -323,7 +340,7 @@ const Dashboard: React.FC = () => {
                                     className="w-full p-3 rounded border text-sm text-right" placeholder="الاسم (عربي)" required
                                 />
                                 <div>
-                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Image URL</label>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Image URL (Google Drive Links Supported)</label>
                                     <input
                                         value={editingCategory.image}
                                         onChange={e => setEditingCategory({ ...editingCategory, image: e.target.value })}
@@ -390,7 +407,7 @@ const Dashboard: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <p className="text-xs text-slate-400 mt-1">Paste an image URL. In a future update, we can enable file uploads.</p>
+                            <p className="text-xs text-slate-400 mt-1">Paste an image URL. Goole Drive links will be automatically converted.</p>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
@@ -449,9 +466,8 @@ const Dashboard: React.FC = () => {
             )}
 
             {/* Service Product Linking Section */}
-            <div className="mt-12 bg-brand-card rounded-xl shadow-sm border border-brand-border p-8">
+            <div className="mt-12 max-w-7xl mx-auto bg-brand-card rounded-xl shadow-sm border border-brand-border p-8">
                 <h2 className="text-2xl font-bold text-brand-text mb-6 border-b pb-4">Link Products to Services</h2>
-                {/* ... existing linking code ... */}
                 <div className="flex gap-4 mb-6">
                     <select
                         className="p-3 border rounded-lg w-full md:w-1/3"
@@ -529,7 +545,14 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Featured Categories Section */}
-            <FeaturedCategoriesManager categories={categories} />
+            <div className="max-w-7xl mx-auto">
+                <FeaturedCategoriesManager categories={categories} />
+            </div>
+
+            {/* Hero Background Manager */}
+            <div className="max-w-7xl mx-auto">
+                <HerobackgroundManager />
+            </div>
         </div>
     );
 };
@@ -613,5 +636,116 @@ const FeaturedCategoriesManager: React.FC<{ categories: Category[] }> = ({ categ
     );
 };
 
+// Sub-component for Hero Background Images
+const HerobackgroundManager: React.FC = () => {
+    const [images, setImages] = useState<string[]>([]);
+    const [newImage, setNewImage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const docRef = doc(db, 'settings', 'hero_backgrounds');
+                const snap = await getDoc(docRef);
+                if (snap.exists()) {
+                    setImages(snap.data().images || []);
+                } else {
+                    // Defaults
+                    setImages([
+                        '/hero-camera.webp',
+                        '/hero-lock.jpg',
+                        '/hero-sensors.jpg'
+                    ]);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchSettings();
+    }, []);
+
+    const handleAddImage = () => {
+        if (!newImage) return;
+        const processed = convertGoogleDriveLink(newImage);
+        setImages([...images, processed]);
+        setNewImage('');
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAddImage();
+        }
+    };
+
+    const handleRemoveImage = (idx: number) => {
+        setImages(images.filter((_, i) => i !== idx));
+    };
+
+    const handleSave = async () => {
+        setLoading(true);
+        try {
+            await setDoc(doc(db, 'settings', 'hero_backgrounds'), {
+                images: images
+            });
+            alert('Updated hero backgrounds!');
+        } catch (err) {
+            console.error(err);
+            alert('Error saving backgrounds');
+        }
+        setLoading(false);
+    };
+
+    return (
+        <div className="mt-12 bg-white rounded-xl shadow-sm border border-brand-border p-8 mb-20">
+            <h2 className="text-2xl font-bold text-brand-text mb-2">Hero Section Backgrounds</h2>
+            <p className="text-slate-500 mb-6">Manage the images that cycle in the homepage background.</p>
+
+            <div className="flex gap-4 mb-6">
+                <div className="flex-1">
+                    <input
+                        value={newImage}
+                        onChange={(e) => setNewImage(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Paste image URL here (Google Drive supported)"
+                        className="w-full p-3 border rounded-lg"
+                    />
+                </div>
+                <button
+                    type="button"
+                    onClick={handleAddImage}
+                    className="bg-brand-secondary text-white px-6 rounded-lg font-bold hover:bg-brand-secondary/90"
+                >
+                    Add Image
+                </button>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {images.map((img, idx) => (
+                    <div key={idx} className="relative group rounded-lg overflow-hidden h-40 bg-slate-100 border border-slate-200">
+                        <img src={img} alt="Hero bg" className="w-full h-full object-cover" />
+                        <button
+                            onClick={() => handleRemoveImage(idx)}
+                            className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            <div className="flex justify-end">
+                <button
+                    onClick={handleSave}
+                    disabled={loading}
+                    className="bg-brand-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-primary/90 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+                >
+                    {loading ? <Loader className="animate-spin" /> : <Save size={20} />}
+                    Save Hero Backgrounds
+                </button>
+            </div>
+        </div>
+    );
+};
 
 export default Dashboard;

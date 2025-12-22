@@ -15,6 +15,7 @@ export interface TranslationStrings {
   heroSubheadline: string;
   ctaConsultation: string;
   ctaContact: string;
+  quickLinks: string;
 
   // Solution Categories
   catSmartHome: SolutionCategory;

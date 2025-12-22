@@ -113,19 +113,33 @@ const Home: React.FC<HomeProps> = ({ lang }) => {
     const isRtl = lang === 'ar';
     const navigate = useNavigate();
     const [currentBg, setCurrentBg] = useState(0);
-
-    const backgroundImages = [
+    const [backgroundImages, setBackgroundImages] = useState([
         '/hero-camera.webp',
         '/hero-lock.jpg',
         '/hero-sensors.jpg'
-    ];
+    ]);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const docRef = doc(db, 'settings', 'hero_backgrounds');
+                const snap = await getDoc(docRef);
+                if (snap.exists() && snap.data().images?.length > 0) {
+                    setBackgroundImages(snap.data().images);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [backgroundImages]);
 
     const solutionGroups = [
         { id: 1, cat: t.catSmartHome, icon: <HomeIcon />, img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop" },

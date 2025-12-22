@@ -5,12 +5,13 @@ export const TRANSLATIONS: Record<'en' | 'ar', TranslationStrings> = {
   en: {
     navHome: "Home",
     navServices: "Services",
-    navProducts: "Solutions",
+    navProducts: "Products",
     navContact: "Contact Us",
     heroHeadline: "Nirvana IOT",
     heroSubheadline: "Smart System Solutions",
     ctaConsultation: "Get a Consultation",
     ctaContact: "Contact Us",
+    quickLinks: "Quick Links",
 
     catSmartHome: {
       title: "Smart Home Solutions",
@@ -68,12 +69,13 @@ export const TRANSLATIONS: Record<'en' | 'ar', TranslationStrings> = {
   ar: {
     navHome: "الرئيسية",
     navServices: "خدماتنا",
-    navProducts: "الحلول",
+    navProducts: "منتجاتنا",
     navContact: "اتصل بنا",
     heroHeadline: "Nirvana IOT",
     heroSubheadline: "Smart System Solutions",
     ctaConsultation: "احصل على استشارة",
     ctaContact: "اتصل بنا",
+    quickLinks: "روابط سريعة",
 
     catSmartHome: {
       title: "حلول المنازل الذكية",

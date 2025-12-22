@@ -70,12 +70,12 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
         >
             <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative z-20 h-16">
                 {/* Logo */}
-                <button onClick={() => navigate('/')} className="relative w-32 h-full flex items-center hover:opacity-80 transition-opacity">
+                <button onClick={() => navigate('/')} className="relative w-40 h-full flex items-center hover:opacity-80 transition-opacity">
                     <img
                         src="/logo.png"
                         alt="Nirvana IOT Logo"
-                        className="absolute top-1/2 -translate-y-1/2 w-40 h-40 max-w-none object-contain drop-shadow-xl"
-                        style={{ left: isRtl ? 'auto' : '-20px', right: isRtl ? '-20px' : 'auto' }}
+                        className="absolute top-1/2 -translate-y-1/2 w-64 h-64 max-w-none object-contain drop-shadow-xl"
+                        style={{ left: isRtl ? 'auto' : '-40px', right: isRtl ? '-40px' : 'auto' }}
                     />
                 </button>
 
@@ -90,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                         onMouseEnter={() => setActiveMenu('services')}
                         className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'services' ? 'text-brand-primary' : textColorClass}`}
                     >
-                        {isRtl ? 'خدماتنا' : 'Services'}
+                        {t.navServices}
                     </button>
 
                     <button
@@ -98,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, setLang, isScrolledOrAlwaysOpaque
                         onMouseEnter={() => setActiveMenu('products')}
                         className={`transition-colors font-medium cursor-pointer py-4 block ${activeMenu === 'products' ? 'text-brand-primary' : textColorClass}`}
                     >
-                        {isRtl ? 'منتجاتنا' : 'Products'}
+                        {t.navProducts}
                     </button>
 
                     <button onClick={() => navigate('/contact')} className={`transition-colors font-medium ${textColorClass}`}>{t.navContact}</button>
